@@ -1,36 +1,66 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# The Perfect Square (a.k.a. The Quadrants Bar Chart)
 
-## Getting Started
+## Overview
 
-First, run the development server:
+Take 4 bar charts, turn two of them upside down and stick them together. What do you get? The Quadrants Bar Chart.
+This a fantastic way to make progress towards an ideal state - simply normalise all bar values so they are out of the same amount (eg 100%).
+Then the goal is to fill each bar fully, making a perfect square!
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+It is particularly good for data that naturally falls into 2 or 4 categories, because each half or quadrant represents a category.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## About this project
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+This is an ongoing little project to show case the potential that D3 offers, by manipulating a simple bar chart in an unusual way.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Clone and run the code to see an example of a sports rehabilitation tracker for injured players.
 
-## Learn More
+## How the chart works
 
-To learn more about Next.js, take a look at the following resources:
+#### Bar ordering
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The highest bars, representing the best values, are always towards the centre of the overall square. This make it easier to see the shape of the overall progress, at the expense of the ability to track progress for a particular bar. User will soon be able to remove auto-ordering when they want to track several specific bars more than the overall progress.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+In our sports rehabilitation example, whereas an executive (or manager) may want to just know the overall shape for all injured players, a coach or physio would be more interested in the specific bars.
 
-## Deploy on Vercel
+#### Drilling down
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+User can select a quadrant, and it will enlarge. It is not yet possible to see info on bars or to drill down into bars.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+#### Zooming and panning
+
+In large datasets, like example 2, it is helpful for the user to zoom in (spreading fingers) and pan the data. (This will become more useful once drilling down is available).
+
+#### Grid display optimisation
+
+Its very important in dataviz that space is used effectively. In this implementation, the number of rows and columns will always be optimised according to two factors: (a) the number of charts, and (b) the aspect ratio of the display. 
+
+## Technical implementation
+
+This is React plus D3 project, developed on a chrome browser, and is responsive to all display sizes. However, it hasn't been tested on other browsers or mobile devices.
+
+The data (currently mock) runs through two preparation functions. The first prepares the data to be applied to generic visualisations. The second is a [D3 layout function](https://github.com/petedomokos/The_Quadrants_Bar_Chart/blob/master/src/quadrantsBarChart/quadrantsBarChartLayout.js) to prepare it for the D3 quadrantsBarChartComponent.
+
+D3 runs on an svg element that is rendered within a [React component](https://github.com/petedomokos/The_Quadrants_Bar_Chart/blob/master/src/quadrantsBarChart/QuadrantsBarChart.js).
+
+The [D3 component (quadrantsBarChartComponent)](https://github.com/petedomokos/The_Quadrants_Bar_Chart/blob/master/src/quadrantsBarChart/quadrantsBarChartComponent.js) uses inner functions rather than classes, because this is more consistent with the implementation of D3 itself, allowing
+for seamless integration of these functions within standard D3 chaining.
+
+There is currently no React redux, context, or hooks used for state management and common tasks (eg container resize), these changes are coming soon. 
+
+
+
+## More functionality coming soon
+
+   - A force-directed network which utlises machine learning to cluster similar datapoints together
+   
+   - Hover or tap the bars for an info popup/tooltip
+
+   - Run an animation to see progress unfold alongside other info or videos (eg as part of a larger dashboard)
+
+   - Remove auto-ordering of bars to make tracking particular bars easier ( but tracking the overall shape becomes harder)
+     
+   - Colour variations for each bar in each quadrant to aid individual tracking without having to lose the auto-ordering
+
+
+
+
